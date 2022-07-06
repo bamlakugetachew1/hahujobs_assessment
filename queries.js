@@ -1,6 +1,4 @@
 const Pool = require("pg").Pool;
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const pool = new Pool({
   user: "mxeskohgnaoxkg",
   host: "ec2-52-203-118-49.compute-1.amazonaws.com",
