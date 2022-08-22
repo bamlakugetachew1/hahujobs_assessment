@@ -1,63 +1,14 @@
 const Pool = require("pg").Pool;
+const { request, response } = require("express");
+const jwt = require("jsonwebtoken");
+const TOKEN_SECRET = "hahujobs";
 const pool = new Pool({
-  
-  user: "mxeskohgnaoxkg",
-  host: "ec2-52-203-118-49.compute-1.amazonaws.com",
-  database: "d4boibtoude9bv",
-  password: "e33b9795eb07a5a83823c4aa47e5619e20b06f2a0d519949d0e2fa64300d4f3e",
-  port: 5432,
-   ssl: {
-        rejectUnauthorized: false,
-    }
-    
- /*
-
-user: "postgres",
+  user: "postgres",
   host: "localhost",
   database: "abuye",
   password: "13399955",
   port: 5432,
-
- */
-  
-
-
 });
-
-const getUsers = (request, response) => {
-  pool.query("SELECT * FROM users ORDER BY id ASC", (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });
-};
-
-const getUserById = (request, response) => {
-  const id = parseInt(request.params.id);
-
-  pool.query("SELECT * FROM users WHERE id = $1", [id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });
-};
-
-const createUser = (request, response) => {
-  const { name, email } = request.body;
-
-  pool.query(
-    "INSERT INTO users (name, email) VALUES ($1, $2)",
-    [name, email],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(201).send(`User added with ID: ${results.insertId}`);
-    }
-  );
-};
 
 const createUserfromactions = (request, response) => {
   const { name, email } = request.body.input;
@@ -68,7 +19,6 @@ const createUserfromactions = (request, response) => {
       if (error) {
         throw error;
       }
-      //response.status(200).json(results.rows)m
 
       if (results.rows.length >= 1) {
         response.json({
@@ -94,67 +44,63 @@ const createUserfromactions = (request, response) => {
   );
 };
 
-/*
-    pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
-      if (error) {
-        throw error
-      }
-
-      response.json({
-        name: "user is added succesfully",
-      });
-    })
-
-*/
-
-/*
-       "x-hasura-admin-secret":"bamlaku",
-            
-  const TOKEN_SECRET="YWJ1eWVnZXRnbWFpbGNvbWJhbWxha3VnZXRhY2hld2FzcmVzZW5naWRh";
- 
-          const  hashed= request.body.input.name;
-          var obj = {
-                   "X-Hasura-Role": 'user',
-                   "X-Hasura-User-id":44,
-                    name:hashed, 
-                 };
-          const generated=jwt.sign(obj,TOKEN_SECRET);
-                   */
-
 const loginuser = (request, response) => {
   const { name, email } = request.body.input;
-
   pool.query(
     "SELECT * FROM users WHERE email = $1 AND name = $2",
-    [email,name],
+    [email, name],
     (error, results) => {
       if (error) {
         throw error;
       }
 
       if (results.rows.length >= 1) {
+        var obj = {
+          name: request.body.input.name,
+          email: request.body.input.email,
+        };
+
+        const generated = jwt.sign(obj, TOKEN_SECRET);
+
         response.json({
           message: "you are logged in",
-          token: results.rows,
-          email: email,
+          token: generated,
         });
       } else {
         response.json({
           message: "either name or password is incorrects",
           token: "no token assigned",
-          email: "no email found",
         });
       }
     }
   );
 };
 
+const rigesterTriggers = (request, response) => {
+  response.json({
+    message: "HASURA EVENT triggers called based on users added on databases",
+  });
+};
+
+const uploadimages = (request, response) => {
+  const file = request.body.input;
+  console.log(file);
+};
+
 const getdata = (request, response) => {
   const { email } = request.body.input;
+  const file = request.body.input;
+  console.log(file);
+  response.json({
+    datas: "found",
+  });
+};
 
+const gettitle = (request, response) => {
+  const { title } = request.body.input;
   pool.query(
-    "SELECT * FROM contacts WHERE cemail = $1 ",
-    [email],
+    "SELECT * FROM foods WHERE title = $1 OR time = $1 OR catagory = $1 ",
+    [title],
     (error, results) => {
       if (error) {
         throw error;
@@ -163,22 +109,21 @@ const getdata = (request, response) => {
       if (results.rows.length >= 1) {
         response.json({
           datas: results.rows,
-          numbers: results.rowCount,
         });
       } else {
         response.json({
           datas: "nodatas",
-          numbers: 0,
         });
       }
     }
   );
 };
 
-/*
+const getcomment = (request, response) => {
+  const { foodid } = request.body.input;
   pool.query(
-    "SELECT * FROM users WHERE name = $1 AND email = $2",
-    [name, email],
+    "SELECT * FROM comments WHERE foodid = $1",
+    [foodid],
     (error, results) => {
       if (error) {
         throw error;
@@ -186,76 +131,100 @@ const getdata = (request, response) => {
 
       if (results.rows.length >= 1) {
         response.json({
-          message: "you are logged in",
-          token: "generated",
+          datas: results.rows,
         });
       } else {
         response.json({
-          message: "either name or email incorrect",
-          token: "generated",
+          datas: "nodatas",
         });
       }
     }
   );
+};
 
-  */
 
-const updateUser = (request, response) => {
-  const id = parseInt(request.params.id);
-  const { name, email } = request.body;
 
+
+
+
+
+const durationfilter = (request, response) => {
+  pool.query("SELECT * FROM foods ORDER BY time ASC", (error, results) => {
+    if (error) {
+      throw error;
+    }
+    if (results.rows.length >= 1) {
+      response.json({
+        datas: results.rows,
+      });
+    } else {
+      response.json({
+        datas: "nodatas",
+      });
+    }
+  });
+};
+
+const ingridentsfilter = (request, response) => {
   pool.query(
-    "UPDATE users SET name = $1, email = $2 WHERE id = $3",
-    [name, email, id],
+    "SELECT * FROM foods ORDER BY ingridents ASC",
     (error, results) => {
       if (error) {
         throw error;
       }
-      response.status(200).send(`User modified with ID: ${id}`);
+      if (results.rows.length >= 1) {
+        response.json({
+          datas: results.rows,
+        });
+      } else {
+        response.json({
+          datas: "nodatas",
+        });
+      }
     }
   );
 };
 
-const deleteUser = (request, response) => {
-  const id = parseInt(request.params.id);
+const  detailinfo = (request, response) => {
+  const { foodid } = request.body.input;
+  pool.query(
+    "SELECT * FROM foodstaffs WHERE foodid = $1",
+    [foodid],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
 
-  pool.query("DELETE FROM users WHERE id = $1", [id], (error, results) => {
-    if (error) {
-      throw error;
+      if (results.rows.length >= 1) {
+        response.json({
+          datas: results.rows,
+        });
+      } else {
+        response.json({
+          datas: "nodatas",
+        });
+      }
     }
-    response.status(200).send(`User deleted with ID: ${id}`);
-  });
+  );
 };
 
-const deletecontacts = (request, response) => {
-  const { email } = request.body.input;
-  const val="fg"
-  pool.query("DELETE FROM contacts WHERE cemail = $1 ", [email], (error, results) => {
-    if (error) {
-      throw error;
-    }
-     else{
-      response.json({
-        message:results.rows.length,
-       
-      });
-     }
-  });
 
 
 
-};
+
 
 
 
 module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
   createUserfromactions,
   loginuser,
+  rigesterTriggers,
+  uploadimages,
   getdata,
-  deletecontacts,
+  gettitle,
+  durationfilter,
+  ingridentsfilter,
+  getcomment,
+  detailinfo,
+
 };
