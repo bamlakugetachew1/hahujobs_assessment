@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="max-w-sm w-full lg:max-w-full lg:flex"
-  
-
-
-  >
+  <div class="max-w-sm w-full lg:max-w-full lg:flex">
     <div
       class="h-60 lg:h-auto lg:w-96 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
     >
@@ -127,7 +122,7 @@
       </button>
     </div>
   </div>
-  {{this.message}}
+  {{ this.message }}
 </template>
 
 <script>
@@ -161,17 +156,16 @@ export default {
       value: "",
       yourate: 0,
       comment: "",
-      retrive:"",
-      title:"",
-      description:"",
-
+      retrive: "",
+      title: "",
+      description: "",
     };
   },
 
   methods: {
     likebutton: function () {
       this.unique = localStorage.getItem("unique");
-      
+
       this.val1 = this.val1 + 1;
       if (this.val1 % 2 == 0) {
         document.getElementById("like").style.backgroundColor = "blue";
@@ -224,52 +218,50 @@ export default {
         )
       );
     },
-    check(){
-        this.message = localStorage.getItem("detail");
-        if(this.message=='nodatas'){
-            this.insert_foodstaffs({
-        like:0,
-        rating:0,
-        foodid:this.foodid
-      }).then((data) =>
-       
-      this.detailinfo({ foodid: this.foodid }).then(
-      (data) => ((this.index = data.data.detailinfo.datas),
-          (this.like = this.index[0].like),
-          (this.rating = this.index[0].rating),
-          (this.id = this.index[0].id)
-           
-      ))
-
-      );
-        }
-    }
+    check() {
+      this.message = localStorage.getItem("detail");
+      if (this.message == "nodatas") {
+        this.insert_foodstaffs({
+          like: 0,
+          rating: 0,
+          foodid: this.foodid,
+        }).then((data) =>
+          this.detailinfo({ foodid: this.foodid }).then(
+            (data) => (
+              (this.index = data.data.detailinfo.datas),
+              (this.like = this.index[0].like),
+              (this.rating = this.index[0].rating),
+              (this.id = this.index[0].id)
+            )
+          )
+        );
+      }
+    },
   },
 
   created() {
     this.foodid = this.$route.params.foodid;
-    localStorage.setItem("unique",this.foodid);
+    localStorage.setItem("unique", this.foodid);
     this.title = this.$route.params.title;
     this.description = this.$route.params.description;
-    this.ingridents =this.$route.params.ingridents;
+    this.ingridents = this.$route.params.ingridents;
     this.image_url = this.$route.params.image_url;
     this.steps = this.$route.params.steps;
     this.time = this.$route.params.time;
     this.detailinfo({ foodid: this.foodid }).then(
-      (data) => ((this.index = data.data.detailinfo.datas),
-          localStorage.setItem("detail",this.index),
-          (this.like = this.index[0].like),
-          (this.rating = this.index[0].rating),
-          (this.id = this.index[0].id)
-           
+      (data) => (
+        (this.index = data.data.detailinfo.datas),
+        localStorage.setItem("detail", this.index),
+        (this.like = this.index[0].like),
+        (this.rating = this.index[0].rating),
+        (this.id = this.index[0].id)
       )
     );
-     
-      this.getcomment({ foodid: this.foodid }).then(
-        (data) => (this.datas = data.data.getcomment.datas)
-      );
+    this.getcomment({ foodid: this.foodid }).then(
+      (data) => (this.datas = data.data.getcomment.datas)
+    );
 
-       this.check();
+    this.check();
   },
 
   setup() {
@@ -355,8 +347,6 @@ export default {
       })
     );
 
- 
-
     const { mutate: getcomment } = useMutation(
       gql`
         mutation getcomment($foodid: String!) {
@@ -387,8 +377,6 @@ export default {
       })
     );
 
-
-
     return {
       update_foodstaffs,
       getcomment,
@@ -399,6 +387,4 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped></style>

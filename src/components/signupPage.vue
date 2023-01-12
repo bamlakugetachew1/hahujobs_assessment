@@ -1,5 +1,8 @@
 <template>
-  <h3 class="px-7 font-semibold text-gray-800" style="font-family: 'Source Sans Pro', sans-serif">
+  <h3
+    class="px-7 font-semibold text-gray-800"
+    style="font-family: 'Source Sans Pro', sans-serif"
+  >
     {{ this.index }}
   </h3>
   <div class="container w-80 mx-auto my-20 px-6 py-6 shadow">
@@ -28,8 +31,8 @@
     </div>
     <div class="text-center mt-3">
       <button
-       @click="reset"
-       class="px-7 py-2 mx-2 font-semibold text-white bg-pink-600 rounded"
+        @click="reset"
+        class="px-7 py-2 mx-2 font-semibold text-white bg-pink-600 rounded"
       >
         RESET
       </button>
@@ -66,9 +69,7 @@ export default {
 
   methods: {
     reset() {
-        this.name="",
-        this.email="",
-        this.index=""
+      (this.name = ""), (this.email = ""), (this.index = "");
     },
 
     createuser() {
@@ -82,7 +83,6 @@ export default {
   setup() {
     const name = ref("en");
     const email = ref("en");
-
     const { mutate: register } = useMutation(
       gql`
         mutation register($name: String!, $email: String!) {
@@ -105,6 +105,4 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped></style>

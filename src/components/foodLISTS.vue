@@ -85,17 +85,18 @@
                     :to="{
                       name: 'singleFood',
                       params: {
-                         foodid: space.id,
-                        title:space.title,
-                        description:space.description,
-                        steps:space.steps,
-                        time:space.time,
-                        ingridents:space.ingridents,
-                        image_url:space.image_url,
+                        foodid: space.id,
+                        title: space.title,
+                        description: space.description,
+                        steps: space.steps,
+                        time: space.time,
+                        ingridents: space.ingridents,
+                        image_url: space.image_url,
                       },
                     }"
                   >
-                    {{ space.title }}</router-link>
+                    {{ space.title }}</router-link
+                  >
                 </h5>
                 <p class="text-gray-700 text-base mb-4">
                   {{ space.description }}
@@ -135,24 +136,22 @@
               </a>
               <div class="p-6">
                 <h5 class="text-gray-900 text-xl font-medium mb-2">
-
-                        <router-link
+                  <router-link
                     :to="{
                       name: 'singleFood',
                       params: {
                         foodid: space.id,
-                        title:space.title,
-                        description:space.description,
-                        steps:space.steps,
-                        time:space.time,
-                        ingridents:space.ingridents,
-                        image_url:space.image_url,
+                        title: space.title,
+                        description: space.description,
+                        steps: space.steps,
+                        time: space.time,
+                        ingridents: space.ingridents,
+                        image_url: space.image_url,
                       },
                     }"
                   >
-                    {{ space.title }}</router-link>
-
-
+                    {{ space.title }}</router-link
+                  >
                 </h5>
                 <p class="text-gray-700 text-base mb-4">
                   {{ space.description }}
@@ -188,7 +187,6 @@ const CHARACTERS_QUERY = gql`
       time
       ingridents
       steps
-
     }
   }
 `;

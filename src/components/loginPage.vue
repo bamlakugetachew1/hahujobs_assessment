@@ -36,7 +36,6 @@
       >
         RESET
       </button>
-
       <button
         @click="loginuser({ name: this.name, email: this.email })"
         class="px-7 py-2 mx-2 font-semibold text-white bg-pink-600 rounded"
@@ -93,7 +92,6 @@ export default {
   setup() {
     const name = ref("en");
     const email = ref("en");
-
     const { mutate: login } = useMutation(
       gql`
         mutation login($name: String!, $email: String!) {
