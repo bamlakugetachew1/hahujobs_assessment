@@ -1,5 +1,4 @@
 const Pool = require("pg").Pool;
-const { request, response } = require("express");
 const jwt = require("jsonwebtoken");
 const TOKEN_SECRET = "hahujobs";
 const pool = new Pool({
@@ -84,13 +83,10 @@ const rigesterTriggers = (request, response) => {
 
 const uploadimages = (request, response) => {
   const file = request.body.input;
-  console.log(file);
 };
 
 const getdata = (request, response) => {
-  const { email } = request.body.input;
   const file = request.body.input;
-  console.log(file);
   response.json({
     datas: "found",
   });
@@ -142,12 +138,6 @@ const getcomment = (request, response) => {
   );
 };
 
-
-
-
-
-
-
 const durationfilter = (request, response) => {
   pool.query("SELECT * FROM foods ORDER BY time ASC", (error, results) => {
     if (error) {
@@ -185,7 +175,7 @@ const ingridentsfilter = (request, response) => {
   );
 };
 
-const  detailinfo = (request, response) => {
+const detailinfo = (request, response) => {
   const { foodid } = request.body.input;
   pool.query(
     "SELECT * FROM foodstaffs WHERE foodid = $1",
@@ -208,13 +198,6 @@ const  detailinfo = (request, response) => {
   );
 };
 
-
-
-
-
-
-
-
 module.exports = {
   createUserfromactions,
   loginuser,
@@ -226,5 +209,4 @@ module.exports = {
   ingridentsfilter,
   getcomment,
   detailinfo,
-
 };
